@@ -6,7 +6,8 @@
   "author": "",
   "license": "ISC",
   "scripts": {
-    "build": "webpack --mode production",
+    "build": "node build/webpack.config.js",
+    "start": "webpack-dev-server --mode development",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
@@ -14,6 +15,10 @@
     "webpack-cli": "^3.3.2"
   },
   "devDependencies": {
-    "html-webpack-plugin": "^3.2.0"
+    "css-loader": "^2.1.1",
+    "html-webpack-plugin": "^3.2.0",
+    "style-loader": "^0.23.1",
+    "uglifyjs-webpack-plugin": "^2.1.3",
+    "webpack-dev-server": "^3.3.1"
   }
 }
