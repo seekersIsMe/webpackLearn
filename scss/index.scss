@@ -1,0 +1,14 @@
+$h50: 50px;
+$f40: 40px;
+$w700: 700;
+$color: #ccc000;
+.scss{
+  font{
+    weight: $w700;
+    size: $f40;
+  }
+  color: $color;
+  line{
+    height: $h50;
+  }
+}
