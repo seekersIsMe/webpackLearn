@@ -41,3 +41,28 @@ module.exports = {
   }
 }
 ```
+## 常用的loader
+* `url-loader`和`file-loader` 处理css中背景图片、字体图标、svg图片
+* `html-withimg-loader`处理html中img图片路径的问题
+* `postcss-loader`添加css3前缀，以及插件` autoprefixer`
+  1. 在和webpack.config.js同一目录下新建一个postcss.config.js,配置如下
+  ```
+    module.exports = {
+        plugins : [
+            require('autoprefixer')({
+                browsers : ['last 100 versions']      //必须设置支持的浏览器才会自动添加添加浏览器兼容
+            })
+        ]
+    }
+  ```
+  2. 然后在webpack.config.js中css、less、sass(如果你用这些css预处理器)的加上`postcss-loader`,例如
+  ```
+   {
+        test: /\.less$/,
+        use: extractTextPlugin.extract({
+          fallback: "style-loader",
+          use: ["css-loader", "postcss-loader",'less-loader'],
+          publicPath: '../' //设置图片打包的相对路径
+        })
+      },
+  ```

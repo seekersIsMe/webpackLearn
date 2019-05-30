@@ -1,7 +1,7 @@
 const path = require('path');
 const extractTextPlugin = require('extract-text-webpack-plugin'); // 分离css
 const htmlWebpackPlugin = require('html-webpack-plugin'); // 处理html
-const  cleanWebpackPlugin = require('clean-webpack-plugin');
+const cleanWebpackPlugin = require('clean-webpack-plugin'); //每次打包后清理dist目录
 module.exports ={
   entry: './index.js',
   output: {
@@ -15,7 +15,7 @@ module.exports ={
         test: /\.css$/,
         use: extractTextPlugin.extract({
           fallback: "style-loader",
-          use: "css-loader",
+          use: ["css-loader", "postcss-loader"],
           publicPath: '../' //设置图片打包的相对路径
         })
       },
@@ -23,7 +23,7 @@ module.exports ={
         test: /\.less$/,
         use: extractTextPlugin.extract({
           fallback: "style-loader",
-          use: ["css-loader", 'less-loader'],
+          use: ["css-loader", "postcss-loader",'less-loader'],
           publicPath: '../' //设置图片打包的相对路径
         })
       },
@@ -31,7 +31,7 @@ module.exports ={
         test: /\.scss$/,
         use: extractTextPlugin.extract({
           fallback: "style-loader",
-          use: ["css-loader", 'sass-loader'],
+          use: ["css-loader","postcss-loader", 'sass-loader'],
           publicPath: '../' //设置图片打包的相对路径 
         })
       },
@@ -45,37 +45,36 @@ module.exports ={
                   outputPath: './img/'   // 图片打包后存放的目录
               }
           }
-      ]
+        ]
+      },
+      {
+          test: /\.(htm|html)$/,
+          use: 'html-withimg-loader' // 处理html中img图片
+      },
+      {
+        test: /\.(eot|ttf|woff|svg)$/, //处理字体图标、svg图片
+        use: 'file-loader'
       }
     ]
   },
   plugins: [
-     // new HtmlWebpackPlugin()
-        // new UglifyPlugin(), //压缩js
-        // new HtmlWebpackPlugin({ // 处理html
-        //     filename: '../dist/index.html',// 配置输出文件名和路径 
-        //     template: '../index.html', // 配置文件模板
-        //     inject: true,
-        //     minify: {
-        //       removeComments: true, // 剥离html评论
-        //       collapseWhitespace: true, // 折叠文本节点的空白区域
-        //       removeAttributeQuotes: true, // 尽可能删除属性周围的引号
-        //       minifyCSS: true, // 压缩 HTML 中出现的 CSS 代码
-        //       minifyJS: true // 压缩 HTML 中出现的 JS 代码
-        //       // more options:
-        //       // https://github.com/kangax/html-minifier#options-quick-reference
-        //     },
-        //     // necessary to consistently work with multiple chunks via CommonsChunkPlugin
-        //     // chunksSortMode: 'dependency'
-        //  }),
     new htmlWebpackPlugin({
       template: './index.html',
       filename: 'login.html', //输出的html名字
       hash: true,// 会在js和css后面加上hash串
+      minify: {
+              removeComments: true, // 剥离html评论
+              collapseWhitespace: true, // 折叠文本节点的空白区域
+              removeAttributeQuotes: true, // 尽可能删除属性周围的引号
+              minifyCSS: true, // 压缩 HTML 中出现的 CSS 代码
+              minifyJS: true // 压缩 HTML 中出现的 JS 代码
+              // more options:
+              // https://github.com/kangax/html-minifier#options-quick-reference
+            },
     }),
     new extractTextPlugin({
       filename: `css/index[hash].css`   //编译打包合并后css的存放目录以及名字
     }),
-    new cleanWebpackPlugin()// 每次打包都清理dist目录
+    new cleanWebpackPlugin(),// 每次打包都清理dist目录
   ]
 }
