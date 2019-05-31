@@ -66,3 +66,13 @@ module.exports = {
         })
       },
   ```
+* ES6以及更高版本，`babel-core babel-loader babel-preset-env babel-preset-stage-0`
+```
+  两种解决方案:
+
+  回退低版本
+  npm install -D babel-loader@7 babel-core babel-preset-env
+
+  更新到最高版本:
+  npm install -D babel-loader @babel/core @babel/preset-env webpack
+```

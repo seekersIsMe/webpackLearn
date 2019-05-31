@@ -2,12 +2,21 @@ const path = require('path');
 const extractTextPlugin = require('extract-text-webpack-plugin'); // 分离css
 const htmlWebpackPlugin = require('html-webpack-plugin'); // 处理html
 const cleanWebpackPlugin = require('clean-webpack-plugin'); //每次打包后清理dist目录
+const webpack =require('webpack');
 module.exports ={
-  entry: './index.js',
+  entry: './src/index.js',
   output: {
     filename: 'main[hash].js',//打包后的js名字
     // 输出文件都放到 dist 目录下
     path: path.resolve(__dirname, './dist'),
+  },
+  resolve: {
+    // 别名
+    alias: {
+        $: './src/'
+    },
+    // 省略后缀
+    extensions: ['.js', '.json', '.css']
   },
   module: {
     rules: [
@@ -54,6 +63,12 @@ module.exports ={
       {
         test: /\.(eot|ttf|woff|svg)$/, //处理字体图标、svg图片
         use: 'file-loader'
+      },
+      {
+        test:/\.(js|jsx)$/,
+        use: 'babel-loader',
+        include: /src/,
+        exclude: /node_modules/
       }
     ]
   },
@@ -76,5 +91,13 @@ module.exports ={
       filename: `css/index[hash].css`   //编译打包合并后css的存放目录以及名字
     }),
     new cleanWebpackPlugin(),// 每次打包都清理dist目录
-  ]
+    new webpack.HotModuleReplacementPlugin()
+  ],
+  devServer: {
+    contentBase: './dist',
+    host: 'localhost',      // 默认是localhost
+    port: 3000,             // 端口
+    open: true,             // 自动打开浏览器
+    hot: true               // 开启热更新
+  }
 }
